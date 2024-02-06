@@ -12,7 +12,8 @@ static void* coroutine_1(void* arg) {
 
     thread_data* data = (thread_data*) arg;
     while (data->flag != 0) {
-        printf("1\n");
+        putchar('1');
+        fflush(stdout);
         // time in seconds
         sleep(1);
     }
@@ -26,7 +27,8 @@ static void* coroutine_2(void* arg) {
 
     thread_data* data = (thread_data*) arg;
     while (data->flag != 0) {
-        printf("2\n");
+        putchar('2');
+        fflush(stdout);
         // time in seconds
         sleep(1);
     }
@@ -49,12 +51,33 @@ int main() {
     second_data.flag = 228;
     second_data.exitcode = 456;
 
+    int buffersize = 64;
+    char buffer[buffersize];
+
     pthread_create(&first_thread, NULL, coroutine_1, &first_data);
     pthread_create(&second_thread, NULL, coroutine_2, &second_data);
-    
+
+    pthread_getname_np(first_thread, buffer, buffersize);
+    printf("First thread's default name: %s\n", buffer);
+
+    pthread_getname_np(second_thread, buffer, buffersize);
+    printf("Second thread's default name: %s\n", buffer);
+
+    printf("Changing first thread's name...\n");
+    pthread_setname_np(first_thread, "Arkhip");
+
+    printf("Changing second thread's name...\n");
+    pthread_setname_np(second_thread, "Pihkra");
+
+    pthread_getname_np(first_thread, buffer, buffersize);
+    printf("First thread's new name: %s\n", buffer);
+
+    pthread_getname_np(second_thread, buffer, buffersize);
+    printf("Second thread's new name: %s\n", buffer);
+
     printf("Main thread is waiting for any key to be pressed... \n");
     getchar();
-    printf("Main thread has been unlocked... \n");
+    printf("\nMain thread has been unlocked... \n");
 
     first_data.flag = 0;
     second_data.flag = 0;
@@ -68,6 +91,6 @@ int main() {
     printf("Both threads have finished their procedures... \n");
     printf("First thread's exit code: %d \n", *exitcode_1);
     printf("Second thread's exit code: %d \n", *exitcode_2);
-
+    printf("Exiting the program...\n");
     return 0;
 }
