@@ -8,19 +8,15 @@ typedef struct {
 
 static void* coroutine_1(void* arg) {
     printf("Entering the first thread... \n");
-    int i = 0;
 
     thread_data* data = (thread_data*) arg;
     while (data->flag != 0) {
-        while (i < 10) {
+        for (int i = 0; i < 10; ++i) {
             putchar('1');
             fflush(stdout);
             // time in seconds
             sleep(1);
-        }
-        sleep(1);
-        i = 0;
-        
+        } 
     }
 
     printf("Exiting the first thread... \n");
@@ -29,18 +25,15 @@ static void* coroutine_1(void* arg) {
 
 static void* coroutine_2(void* arg) {
     printf("Entering the second thread... \n");
-    int i = 0;
 
     thread_data* data = (thread_data*) arg;
     while (data->flag != 0) {
-        while(i < 10) {
+        for (int i = 0; i < 10; ++i) {
             putchar('2');
             fflush(stdout);
             // time in seconds
             sleep(1);
         }
-        sleep(1);
-        i = 0;
     }
 
     printf("Exiting the second thread... \n");

@@ -2,12 +2,27 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <csignal>
+#include <errno.h>
 
 typedef struct {
     int flag;
 } thread_data;
 
 pthread_mutex_t mutex;
+
+const char* errcodeIdentifier(int code) {
+    switch(code) {
+        case EINVAL:
+            return "EINVAL";
+        case ETIMEDOUT:
+            return "ETIMEDOUT";
+        case EAGAIN:
+            return "EAGAIN";
+        case EDEADLK:
+            return "EDEADLK";
+    }
+    return "HOW";
+}
 
 void sig_handler(int signo) {
     printf("\nget SIGNINT; %d\n", signo);
@@ -33,7 +48,8 @@ static void* coroutine_1(void* arg) {
             }
 
             if (status != 0) {
-                //resource is not available yet
+                const char* errcode = errcodeIdentifier(status);
+                printf("\nBlocked thread error message: %s\n", errcode);
             } else {
                 break;
             }
@@ -70,7 +86,8 @@ static void* coroutine_2(void* arg) {
             }
 
             if (status != 0) {
-                // resource is not available yet
+                const char* errcode = errcodeIdentifier(status);
+                printf("\nBlocked thread error message: %s\n", errcode);
             } else {
                 break;
             }
