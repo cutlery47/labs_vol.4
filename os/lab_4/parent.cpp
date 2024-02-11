@@ -2,8 +2,11 @@
 #include <iostream>
 #include <cstring>
 #include <sys/wait.h>
+#include <stdlib.h>
 
-int main(int argc, char* argv[], char* envp[]) {
+extern char** environ;
+
+int main(int argc, char* argv[]) {
     printf("==========================\n");
     printf("Entering the main process\n");
 
@@ -11,7 +14,13 @@ int main(int argc, char* argv[], char* envp[]) {
     pid_t id = fork();
 
     if (id == 0) {
-        execve("./child", argv, envp);
+        int errcode = setenv("KANYE_WEST", "MUSICAL_GENIUS", true);
+
+        if (errcode != 0) {
+            printf("There was an error, when adding a new env. variable...\n");
+        }
+
+        execve("./child", argv, environ);
     } else if (id > 0) {
         pid_t self = getpid();
         pid_t parent = getppid();
