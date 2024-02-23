@@ -8,8 +8,9 @@
 #include <cerrno>
 #include <csignal>
 #include <fcntl.h>
+#include <queue>
 
-std::vector<const char*> queue;
+std::queue<const char*> queue;
 
 int client_sock;
 int acceptor_sock;
@@ -30,24 +31,62 @@ pthread_t handler_thread;
 pthread_t acceptor_thread;
 
 static void* listen(void* args) {
+    char buffer[256];
+    while (listener_exitflag == 0) {
+        int count = recv(client_sock, buffer, 256, MSG_DONTWAIT);
+        if (count <= 0) {
+            if (count == 0) {
+                printf("fucking here");
+                sleep(1);
+            }
+            sleep(1);
+        } else {
+            pthread_mutex_lock(&queue_mutex);
+            queue.push(buffer);
+            pthread_mutex_unlock(&queue_mutex);
+        }
+    }
     
+    pthread_exit((void *)0);
     return 0;
 }
 
 static void* handle(void* args) {
-    
+    char hostname[256];
+    while (handler_exitflag == 0) {
+        if (!queue.empty()) {
+            pthread_mutex_lock(&queue_mutex);
+
+            std::string request(queue.front());
+
+            printf("=====================\n");
+            printf("REQUEST FROM CLIENT:\n");
+            printf("%s\n", request.c_str());
+
+            gethostname(hostname, 256);
+            std::string response(request + "\nResponse data: " + hostname);
+
+            int count = send(client_sock, response.c_str(), response.length(), 0);
+            //perror("send");
+
+            pthread_mutex_unlock(&queue_mutex);
+        } 
+        sleep(1);
+        
+    }
+    pthread_exit((void *)0);
     return 0;
 }
 
 static void* _accept(void* args) {
-    socklen_t client_confsize;
+    socklen_t client_confsize = sizeof(client_conf);
+
     while (acceptor_exitflag == 0) {
-        int client_sock = accept(acceptor_sock, (struct sockaddr*)&client_conf, &client_confsize);
+        client_sock = accept(acceptor_sock, (struct sockaddr*)&client_conf, &client_confsize);
         if (client_sock < 0) {
-            perror("accept");
-            fflush(stdout);
             sleep(1);
         } else {
+            printf("client addr: %s\n", client_conf.sun_path);
             pthread_create(&listener_thread, NULL, listen, NULL);
             pthread_create(&handler_thread, NULL, handle, NULL);
             pthread_exit((void *)0);
@@ -106,15 +145,19 @@ int main() {
     acceptor_exitflag = 1;
     handler_exitflag = 1;
 
-    pthread_join(listener_thread, NULL);
-    pthread_join(handler_thread, NULL);
+    printf("Terminating acceptor\n");
     pthread_join(acceptor_thread, NULL);
+    printf("Terminating listener\n");
+    pthread_join(listener_thread, NULL);
+    printf("Terminating handler\n");
+    pthread_join(handler_thread, NULL);
 
     shutdown(acceptor_sock, SHUT_RDWR);
-    close(acceptor_sock);
-
-    printf("Exiting the program\n");
+    //close(acceptor_sock);
     unlink(SOCKPATH);
 
+    printf("Exiting the program\n");
+    sleep(1);
+    
     return 0;
 }
