@@ -54,10 +54,10 @@ static void* listen(void* args) {
 static void* handle(void* args) {
     char hostname[256];
     while (handler_exitflag == 0) {
+        pthread_mutex_lock(&queue_mutex);
         if (!queue.empty()) {
-            pthread_mutex_lock(&queue_mutex);
-
             std::string request(queue.front());
+            pthread_mutex_unlock(&queue_mutex);
 
             printf("=====================\n");
             printf("REQUEST FROM CLIENT:\n");
@@ -67,9 +67,7 @@ static void* handle(void* args) {
             std::string response(request + "\nResponse data: " + hostname);
 
             int count = send(client_sock, response.c_str(), response.length(), 0);
-            //perror("send");
-
-            pthread_mutex_unlock(&queue_mutex);
+            //perror("send");            
         } 
         sleep(1);
         
