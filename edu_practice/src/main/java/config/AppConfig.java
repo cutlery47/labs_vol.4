@@ -9,8 +9,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @ComponentScan("controller")
-@ComponentScan("service")
-@ComponentScan("repository")
 public class AppConfig {
 
     @Bean
@@ -19,6 +17,7 @@ public class AppConfig {
         resolver.setViewClass(JstlView.class);
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
+
         return resolver;
     }
 

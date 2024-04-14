@@ -1,12 +1,12 @@
 package model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Basic;
+import javax.persistence.GenerationType;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 public class Document {
@@ -14,7 +14,7 @@ public class Document {
     @Id
     @Basic
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long documentId;
+    private Long documentId;
 
     @Basic
     private String documentName;
@@ -23,28 +23,33 @@ public class Document {
     private String documentAuthor;
 
     @Basic
-    private Timestamp documentUploadedAt;
+    private LocalDateTime documentUploadedAt;
 
     @Basic
-    private Timestamp documentUpdatedAt;
+    private LocalDateTime documentUpdatedAt;
 
     @Basic
     private String documentText;
+
+    @Basic
+    private String documentKeyWords;
 
     public Document() {}
 
     public Document(long documentId,
                     String documentName,
                     String documentAuthor,
-                    Timestamp documentUploadedAt,
-                    Timestamp documentUpdatedAt,
-                    String documentText) {
+                    LocalDateTime documentUploadedAt,
+                    LocalDateTime documentUpdatedAt,
+                    String documentText,
+                    String documentKeyWords) {
         this.documentId = documentId;
         this.documentName = documentName;
         this.documentAuthor = documentAuthor;
         this.documentUploadedAt = documentUploadedAt;
         this.documentUpdatedAt = documentUpdatedAt;
         this.documentText = documentText;
+        this.documentKeyWords = documentKeyWords;
     }
 
     public long getDocumentId() {
@@ -59,17 +64,30 @@ public class Document {
         return documentAuthor;
     }
 
+    public LocalDateTime getDocumentUpdatedAt() {
+        return documentUpdatedAt;
+    }
+
+    public LocalDateTime getDocumentUploadedAt() {
+        return documentUploadedAt;
+    }
+
     public String getDocumentText() {
         return documentText;
     }
 
-    public Timestamp getDocumentUpdatedAt() {
-        return documentUpdatedAt;
+    public String getDocumentKeyWords() {
+        return documentKeyWords;
     }
 
-    public Timestamp getDocumentUploadedAt() {
-        return documentUploadedAt;
+    public String toString() {
+        return ("id: " + documentId +
+                ", name: " + documentName +
+                ", author: " + documentAuthor +
+                ", text: " + documentText +
+                ", updated at: " + documentUpdatedAt +
+                ", uploaded at: " + documentUploadedAt +
+                ", key words: " + documentKeyWords);
     }
-
 
 }

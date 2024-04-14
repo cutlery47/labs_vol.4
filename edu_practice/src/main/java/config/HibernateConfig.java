@@ -1,8 +1,8 @@
 package config;
 
-import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -32,20 +32,20 @@ public class HibernateConfig {
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/edu_prac");
         dataSource.setUsername("cutlery");
+        dataSource.setPassword("12345");
 
         return dataSource;
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+    public PlatformTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory);
+        transactionManager.setSessionFactory(sessionFactory().getObject());
 
         return transactionManager;
     }
-
 
     final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
@@ -55,6 +55,5 @@ public class HibernateConfig {
 
         return hibernateProperties;
     }
-
 
 }
