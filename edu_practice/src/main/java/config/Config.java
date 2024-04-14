@@ -9,7 +9,9 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @ComponentScan("controller")
-public class AppConfig {
+@ComponentScan("service")
+@ComponentScan("repository")
+public class Config {
 
     @Bean
     public ViewResolver internalResourceViewResolver() {
