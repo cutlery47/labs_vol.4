@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan("controller")
 @ComponentScan("service")
 @ComponentScan("repository")
-public class Config {
+public class AppConfig {
 
     @Bean
     public ViewResolver internalResourceViewResolver() {
