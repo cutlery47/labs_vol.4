@@ -20,11 +20,11 @@ public class DocumentService {
     private DocumentRepository documentRepository;
 
     public Document getDocumentById(long id) {
-        return null;
+        return documentRepository.get(id);
     }
 
     public List<Document> getDocuments() {
-        return null;
+        return documentRepository.getAll();
     }
 
     public void addDocument(MultipartFile raw_document) {
@@ -43,7 +43,7 @@ public class DocumentService {
     }
 
     public void deleteDocumentById(long id) {
-
+        documentRepository.delete(id);
     }
 
 }

@@ -13,9 +13,6 @@ import java.util.List;
 
 import model.Document;
 
-import javax.persistence.Table;
-
-
 @Repository
 @Transactional
 @ComponentScan("config")
@@ -25,11 +22,53 @@ public class DocumentRepository {
     private SessionFactory sessionFactory;
 
     public Document get(long id) {
-        return null;
+        Session session = null;
+        Transaction transaction = null;
+        Document document = null;
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            document = session.get(Document.class, id);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return document;
     }
 
     public List<Document> getAll() {
-        return null;
+        List<Document> documents = null;
+        Session session = null;
+        Transaction transaction = null;
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            documents = session.createQuery("from model.Document", Document.class).list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
+        return documents;
     }
 
     public void add(Document document) {
@@ -58,6 +97,27 @@ public class DocumentRepository {
     }
 
     public void delete(long id) {
+        Session session = null;
+        Transaction transaction = null;
 
+        Document document = null;
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            document = session.get(Document.class, id);
+            session.delete(document);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }

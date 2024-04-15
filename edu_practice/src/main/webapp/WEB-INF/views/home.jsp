@@ -96,8 +96,31 @@
         <th>Deleted At</th>
         <th>Actions</th>
     </tr>
-    <tr>
 
+    <tr>
+        <td>1</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="actions">
+            <button onclick=downloadDocument(1)>Download</button>
+            <button onclick=deleteDocument(1)>Delete</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>2</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="actions">
+            <button onclick=downloadDocument(2)>Download</button>
+            <button onclick=deleteDocument(2)>Delete</button>
+        </td>
     </tr>
 
 </table>
@@ -110,14 +133,27 @@
 <button class="upload-button" onclick=uploadFile()>Upload</button>
 
 <script>
-    function downloadDocument() {
-        // Implement download functionality
-        alert("Downloading document...");
+
+    function downloadDocument(id) {
+        fetch("http://localhost:8080/download/" + id,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
     }
 
-    function deleteDocument() {
-        // Implement delete functionality
-        alert("Deleting document...");
+    function deleteDocument(id) {
+        fetch("http://localhost:8080/delete/" + id,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
     }
 
     function uploadFile() {
@@ -130,6 +166,7 @@
             }
         )
     }
+
 </script>
 </body>
 </html>
