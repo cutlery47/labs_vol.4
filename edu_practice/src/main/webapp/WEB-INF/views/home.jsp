@@ -1,15 +1,135 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Document Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .upload-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .upload-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .upload-button:hover {
+            background-color: #45a049;
+        }
+        .upload-text {
+            padding: 8px 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        .upload-text:hover {
+            border-color: #aaa;
+        }
+        .upload-text::before {
+            content: 'Upload File';
+        }
+        input[type="file"]:focus + .upload-text {
+            border-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-<h2>Upload a File</h2>
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" id="file">
-    <button type="submit">Upload</button>
-</form>
+<h2>Document List</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Document Name</th>
+        <th>Document Author</th>
+        <th>Document Keywords</th>
+        <th>Updated At</th>
+        <th>Deleted At</th>
+        <th>Actions</th>
+    </tr>
+    <tr>
+
+    </tr>
+
+</table>
+
+<div class="upload-wrapper">
+    <input type="file" id="fileInput">
+    <label for="fileInput" class="upload-text"></label>
+</div>
+
+<button class="upload-button" onclick=uploadFile()>Upload</button>
+
+<script>
+    function downloadDocument() {
+        // Implement download functionality
+        alert("Downloading document...");
+    }
+
+    function deleteDocument() {
+        // Implement delete functionality
+        alert("Deleting document...");
+    }
+
+    function uploadFile() {
+        fetch("http://localhost:8080/upload",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
+    }
+</script>
 </body>
 </html>

@@ -5,22 +5,20 @@ import org.hibernate.SessionFactory;
 
 import org.hibernate.Transaction;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import model.Document;
 
-import javax.transaction.Transactional;
+import javax.persistence.Table;
 
-//import javax.persistence.Table;
 
 @Repository
 @Transactional
 @ComponentScan("config")
-//@Table(name = "documents")
 public class DocumentRepository {
 
     @Autowired

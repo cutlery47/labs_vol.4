@@ -1,37 +1,34 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Basic;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "documents")
 public class Document {
 
     @Id
-    @Basic
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "document_id")
     private Long documentId;
 
-    @Basic
+    @Column(name = "document_name")
     private String documentName;
 
-    @Basic
+    @Column(name = "document_author")
     private String documentAuthor;
 
-    @Basic
+    @Column(name = "document_uploaded_at")
     private LocalDateTime documentUploadedAt;
 
-    @Basic
+    @Column(name = "document_updated_at")
     private LocalDateTime documentUpdatedAt;
 
-    @Basic
+    @Column(name = "document_text")
     private String documentText;
 
-    @Basic
+    @Column(name = "document_key_words")
     private String documentKeyWords;
 
     public Document() {}
@@ -43,6 +40,7 @@ public class Document {
                     LocalDateTime documentUpdatedAt,
                     String documentText,
                     String documentKeyWords) {
+        super();
         this.documentId = documentId;
         this.documentName = documentName;
         this.documentAuthor = documentAuthor;
@@ -78,6 +76,32 @@ public class Document {
 
     public String getDocumentKeyWords() {
         return documentKeyWords;
+    }
+
+    public void setDocumentKeyWords(String documentKeyWords) {
+        this.documentKeyWords = documentKeyWords;
+    }
+
+    public void setDocumentText(String documentText) {
+        this.documentText = documentText;
+    }
+
+    public void setDocumentUpdatedAt(LocalDateTime documentUpdatedAt) {
+        this.documentUpdatedAt = documentUpdatedAt;
+    }
+
+    public void setDocumentUploadedAt(LocalDateTime documentUploadedAt) { this.documentUploadedAt = documentUploadedAt; }
+
+    public void setDocumentAuthor(String documentAuthor) {
+        this.documentAuthor = documentAuthor;
+    }
+
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
+    }
+
+    public void setDocumentId(Long documentId) {
+        this.documentId = documentId;
     }
 
     public String toString() {

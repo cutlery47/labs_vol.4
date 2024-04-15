@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import service.DocumentService;
 
 @Controller
@@ -18,13 +17,15 @@ public class DocumentController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String getSome() {
-        ; // null for the sake of test
+
         return "home";
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String upload() {
+        //null for the sake of test
         documentService.addDocument(null);
+        System.out.println("123123123");
         return "home";
     }
 
