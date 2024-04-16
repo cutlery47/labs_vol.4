@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import service.DocumentService;
 
 import model.Document;
@@ -26,9 +28,14 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void upload() {
+    public String upload(
+            @RequestParam(required = true) MultipartFile raw_document,
+            @RequestParam(required = true) String document_name,
+            @RequestParam(required = true) String document_author) {
         System.out.println("uploading a new user");
-        documentService.addDocument(null);
+
+        documentService.addDocument(raw_document, document_name, document_author);
+        return "home";
     }
 
     @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)

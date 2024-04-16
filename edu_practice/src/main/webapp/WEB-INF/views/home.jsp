@@ -76,11 +76,18 @@
         .upload-text:hover {
             border-color: #aaa;
         }
-        .upload-text::before {
-            content: 'Upload File';
-        }
+
         input[type="file"]:focus + .upload-text {
             border-color: #45a049;
+        }
+
+        /* Additional styles for text inputs */
+        input[type="text"] {
+            padding: 8px 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            width: calc(100% - 30px); /* Adjust width to match other elements */
         }
     </style>
 </head>
@@ -125,12 +132,18 @@
 
 </table>
 
-<div class="upload-wrapper">
-    <input type="file" id="fileInput">
-    <label for="fileInput" class="upload-text"></label>
-</div>
+<form method="post" enctype="multipart/form-data" action="http://localhost:8080/upload">
+    <input type="text" name="document_name" placeholder="Document Name">
+    <input type="text" name="document_author" placeholder="Document Author">
 
-<button class="upload-button" onclick=uploadFile()>Upload</button>
+    <div class="upload-wrapper">
+        <input type="file" id="fileInput" name="raw_document" accept=".pdf">
+        <label for="fileInput" class="upload-text">Select File</label>
+    </div>
+
+    <button type="submit" class="upload-button">Upload</button>
+</form>
+
 
 <script>
 
@@ -155,18 +168,6 @@
             }
         )
     }
-
-    function uploadFile() {
-        fetch("http://localhost:8080/upload",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            }
-        )
-    }
-
 </script>
 </body>
 </html>
