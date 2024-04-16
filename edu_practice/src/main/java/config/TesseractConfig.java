@@ -13,7 +13,7 @@ public class TesseractConfig {
     public Tesseract tesseract() {
         Tesseract tesseract = new Tesseract();
         tesseract.setDatapath("src/main/resources/tessdata");
-        tesseract.setLanguage("eng+rus");
+        tesseract.setLanguage("eng");
 
         return tesseract;
     }
