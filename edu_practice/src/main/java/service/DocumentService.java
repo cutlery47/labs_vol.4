@@ -29,10 +29,12 @@ public class DocumentService {
     private Tesseract tesseract;
 
     public Document getDocumentById(long id) {
+
         return documentRepository.get(id);
     }
 
     public List<Document> getDocuments() {
+
         return documentRepository.getAll();
     }
 

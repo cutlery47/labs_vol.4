@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import service.DocumentService;
 
 import model.Document;
@@ -23,15 +24,18 @@ public class DocumentController {
     private DocumentService documentService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String getSome() {
-        return "home";
+    public ModelAndView getSome() {
+        List<Document> documents = documentService.getDocuments();
+        ModelAndView modelAndView = new ModelAndView("home");
+        modelAndView.addObject("documents", documents);
+        return modelAndView;
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String upload(
-            @RequestParam(required = true) MultipartFile raw_document,
-            @RequestParam(required = true) String document_name,
-            @RequestParam(required = true) String document_author) {
+            @RequestParam MultipartFile raw_document,
+            @RequestParam String document_name,
+            @RequestParam String document_author) {
         System.out.println("uploading a new user");
 
         documentService.addDocument(raw_document, document_name, document_author);

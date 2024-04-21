@@ -1,3 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,37 +137,29 @@
         <th>ID</th>
         <th>Document Name</th>
         <th>Document Author</th>
-        <th>Document Keywords</th>
         <th>Updated At</th>
         <th>Deleted At</th>
+        <th>Text</th>
+        <th>Document Keywords</th>
         <th>Actions</th>
     </tr>
-
-    <tr>
-        <td>1</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="actions">
-            <button onclick="downloadDocument(1)">Download</button>
-            <button onclick="deleteDocument(1)">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td>2</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="actions">
-            <button onclick="downloadDocument(2)">Download</button>
-            <button onclick="deleteDocument(2)">Delete</button>
-        </td>
-    </tr>
+    <tbody>
+        <c:forEach var="document" items="${documents}">
+            <tr>
+                <td>${document.documentId}</td>
+                <td>${document.documentName}</td>
+                <td>${document.documentAuthor}</td>
+                <td>${document.documentUploadedAt}</td>
+                <td>${document.documentUpdatedAt}</td>
+                <td>${document.documentText}</td>
+                <td>${document.documentKeyWords}</td>
+                <td class="actions">
+                    <button onclick="downloadDocument(2)">Download</button>
+                    <button onclick="deleteDocument(2)">Delete</button>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
 
 </table>
 
@@ -202,7 +198,7 @@
     }
 
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = "none";
         }
     }

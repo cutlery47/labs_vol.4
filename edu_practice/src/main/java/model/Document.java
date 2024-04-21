@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Document {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
     private Long documentId;
