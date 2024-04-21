@@ -1,9 +1,14 @@
 package model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Setter
 @Entity
 @Table(name = "documents")
 public class Document {
@@ -13,21 +18,27 @@ public class Document {
     @Column(name = "document_id")
     private Long documentId;
 
+    @Getter
     @Column(name = "document_name")
-    private String documentName;
+    private String documentName = "unknown file";
 
+    @Getter
     @Column(name = "document_author")
-    private String documentAuthor;
+    private String documentAuthor = "unknown author";
 
+    @Getter
     @Column(name = "document_uploaded_at")
     private LocalDateTime documentUploadedAt;
 
+    @Getter
     @Column(name = "document_updated_at")
     private LocalDateTime documentUpdatedAt;
 
-    @Column(name = "document_text")
+    @Getter
+    @Column(name = "document_text", columnDefinition = "TEXT")
     private String documentText;
 
+    @Getter
     @Column(name = "document_key_words")
     private String documentKeyWords;
 
@@ -42,66 +53,16 @@ public class Document {
                     String documentKeyWords) {
         super();
         this.documentId = documentId;
-        this.documentName = documentName;
-        this.documentAuthor = documentAuthor;
+        if (!Objects.equals(documentName, "")) {
+            this.documentName = documentName;
+        }
+        if (!Objects.equals(documentAuthor, "")) {
+            this.documentAuthor = documentAuthor;
+        }
         this.documentUploadedAt = documentUploadedAt;
         this.documentUpdatedAt = documentUpdatedAt;
         this.documentText = documentText;
         this.documentKeyWords = documentKeyWords;
-    }
-
-    public long getDocumentId() {
-        return documentId;
-    }
-
-    public String getDocumentName() {
-        return documentName;
-    }
-
-    public String getDocumentAuthor() {
-        return documentAuthor;
-    }
-
-    public LocalDateTime getDocumentUpdatedAt() {
-        return documentUpdatedAt;
-    }
-
-    public LocalDateTime getDocumentUploadedAt() {
-        return documentUploadedAt;
-    }
-
-    public String getDocumentText() {
-        return documentText;
-    }
-
-    public String getDocumentKeyWords() {
-        return documentKeyWords;
-    }
-
-    public void setDocumentKeyWords(String documentKeyWords) {
-        this.documentKeyWords = documentKeyWords;
-    }
-
-    public void setDocumentText(String documentText) {
-        this.documentText = documentText;
-    }
-
-    public void setDocumentUpdatedAt(LocalDateTime documentUpdatedAt) {
-        this.documentUpdatedAt = documentUpdatedAt;
-    }
-
-    public void setDocumentUploadedAt(LocalDateTime documentUploadedAt) { this.documentUploadedAt = documentUploadedAt; }
-
-    public void setDocumentAuthor(String documentAuthor) {
-        this.documentAuthor = documentAuthor;
-    }
-
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
-    }
-
-    public void setDocumentId(Long documentId) {
-        this.documentId = documentId;
     }
 
     public String toString() {

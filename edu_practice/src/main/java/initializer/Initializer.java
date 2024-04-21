@@ -25,7 +25,7 @@ public class Initializer implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 
-        dispatcher.setMultipartConfig(new MultipartConfigElement("/tmp", 1000000000, 1000000000 * 2, 1000000000 / 2));
+        dispatcher.setMultipartConfig(new MultipartConfigElement("", 1000000000, 1000000000 * 2, 1000000000 / 2));
 
     }
 }

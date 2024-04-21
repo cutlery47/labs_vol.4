@@ -81,13 +81,48 @@
             border-color: #45a049;
         }
 
-        /* Additional styles for text inputs */
+
         input[type="text"] {
             padding: 8px 14px;
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-bottom: 20px;
-            width: calc(100% - 30px); /* Adjust width to match other elements */
+            width: calc(100% - 30px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -112,8 +147,8 @@
         <td></td>
         <td></td>
         <td class="actions">
-            <button onclick=downloadDocument(1)>Download</button>
-            <button onclick=deleteDocument(1)>Delete</button>
+            <button onclick="downloadDocument(1)">Download</button>
+            <button onclick="deleteDocument(1)">Delete</button>
         </td>
     </tr>
 
@@ -125,27 +160,52 @@
         <td></td>
         <td></td>
         <td class="actions">
-            <button onclick=downloadDocument(2)>Download</button>
-            <button onclick=deleteDocument(2)>Delete</button>
+            <button onclick="downloadDocument(2)">Download</button>
+            <button onclick="deleteDocument(2)">Delete</button>
         </td>
     </tr>
 
 </table>
 
-<form method="post" enctype="multipart/form-data" action="http://localhost:8080/upload">
-    <input type="text" name="document_name" placeholder="Document Name">
-    <input type="text" name="document_author" placeholder="Document Author">
+<button id="openModalBtn">Upload Document</button>
 
-    <div class="upload-wrapper">
-        <input type="file" id="fileInput" name="raw_document" accept=".pdf">
-        <label for="fileInput" class="upload-text">Select File</label>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Enter Document Details</h2>
+        <form id="documentForm" enctype="multipart/form-data" action="http://localhost:8080/upload" method="post">
+            <input type="text" id="docName" name="document_name" placeholder="Document Name">
+            <input type="text" id="docAuthor" name="document_author" placeholder="Document Author">
+            <div class="upload-wrapper">
+                <input type="file" id="fileInput" name="raw_document" accept=".pdf">
+                <label for="fileInput" class="upload-text">Select File</label>
+            </div>
+            <button type="submit" class="upload-button">Upload</button>
+        </form>
     </div>
-
-    <button type="submit" class="upload-button">Upload</button>
-</form>
-
+</div>
 
 <script>
+
+    var modal = document.getElementById("myModal");
+
+    var btn = document.getElementById("openModalBtn");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 
     function downloadDocument(id) {
         fetch("http://localhost:8080/download/" + id,

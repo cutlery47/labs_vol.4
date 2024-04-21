@@ -6,14 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.sql.Timestamp;
+import java.util.*;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.leptonica.PIX;
-import org.bytedeco.tesseract.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -21,19 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import model.Document;
 import repository.DocumentRepository;
-
-import static org.bytedeco.leptonica.global.lept.pixDestroy;
-import static org.bytedeco.leptonica.global.lept.pixRead;
-
-//class Person {
-//
-//    int age;
-//    int name;
-//    int sex;
-//
-//    return Tesseract;
-//
-//}
 
 @Service
 @ComponentScan("repository")
@@ -53,6 +36,7 @@ public class DocumentService {
         return documentRepository.getAll();
     }
 
+
     public void addDocument(MultipartFile raw_document,
                             String document_name,
                             String document_author) {
@@ -61,58 +45,79 @@ public class DocumentService {
 
         // initializing an intermediate file, which is created from raw_file
         File document_file = new File(
-                "/home/cutlery/coding/leti/labs_vol.4/edu_practice/src/main/resources/files/"
+                "C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
                 + document_name + ".pdf");
 
-//        File document_file = new File("/home/cutlery/coding/leti/labs_vol.4/edu_practice/src/main/java/img.png");
-
+        String recognized_text = "";
         try {
-            // physically creating the file
+            // physically creating the file and filling it up
             document_file.createNewFile();
-            OutputStream out = new FileOutputStream(document_file);
-
-            // filling up the file
+            OutputStream out = Files.newOutputStream(document_file.toPath());
             out.write(raw_document.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        String text = null;
-        if (!(document_file.exists() && !document_file.isDirectory())) {
+            // tesseract file recognition
+            recognized_text = tesseract.doOCR(document_file);
+        } catch (TesseractException | IOException e) {
+            e.printStackTrace();
             return;
         }
 
-        try {
-            text = tesseract.doOCR(document_file);
-        } catch (TesseractException e) {
-            e.printStackTrace();
+        HashMap<String, Integer> words_freq = new HashMap<>();
+        String[] words = recognized_text.split("[\\p{Punct}\\s]+");
+        for (String word : words) {
+            if (word.length() >= 5) {
+                words_freq.put(word, words_freq.getOrDefault(word, 0) + 1);
+            }
         }
 
-//        documentRepository.add(document);
+        words_freq = sortByValue(words_freq);
 
-//        BytePointer outText;
-//
-//        TessBaseAPI api = new TessBaseAPI();
-//
-//        if (api.Init(null, "eng") != 0) {
-//            System.out.println("Cound init tesseract");
-//        }
-//
-//        PIX image = pixRead("/home/cutlery/coding/leti/labs_vol.4/edu_practice/src/main/java/img.png");
-//        api.SetImage(image);
-//
-//        outText = api.GetUTF8Text();
-//        System.out.println(outText.getString());
-//
-//        api.End();
-//        outText.deallocate();
-//        pixDestroy(image);
+        int i = 0;
+        StringBuilder most_common = new StringBuilder();
+        for (Map.Entry<String, Integer> entry : words_freq.entrySet()) {
+            if (i > words_freq.size() - 6) {
+                most_common.append(entry.getKey()).append("; ");
+            }
+            i += 1;
+        }
 
+        Document document = new Document(
+                0,
+                document_name,
+                document_author,
+                timestamp,
+                timestamp,
+                recognized_text,
+                most_common.toString());
 
+        documentRepository.add(document);
     }
 
     public void deleteDocumentById(long id) {
         documentRepository.delete(id);
+    }
+
+    public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
+    {
+        // Create a list from elements of HashMap
+        List<Map.Entry<String, Integer> > list =
+                new LinkedList<Map.Entry<String, Integer> >(hm.entrySet());
+
+        // Sort the list
+        Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> o1,
+                               Map.Entry<String, Integer> o2)
+            {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        // put data from sorted list to hashmap
+        HashMap<String, Integer> temp = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> aa : list) {
+            temp.put(aa.getKey(), aa.getValue());
+        }
+        return temp;
     }
 
 }

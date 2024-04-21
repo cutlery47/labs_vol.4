@@ -33,7 +33,7 @@ public class HibernateConfig {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/edu_prac");
-        dataSource.setUsername("cutlery");
+        dataSource.setUsername("postgres");
         dataSource.setPassword("12345");
 
         return dataSource;
