@@ -5,41 +5,34 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
 @Setter
 @Entity
 @Table(name = "documents")
 public class Document {
 
     @Id
-    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
     private Long documentId;
 
-    @Getter
     @Column(name = "document_name")
     private String documentName = "unknown file";
 
-    @Getter
     @Column(name = "document_author")
     private String documentAuthor = "unknown author";
 
-    @Getter
     @Column(name = "document_uploaded_at")
-    private LocalDateTime documentUploadedAt;
+    private String documentUploadedAt;
 
-    @Getter
     @Column(name = "document_updated_at")
-    private LocalDateTime documentUpdatedAt;
+    private String documentUpdatedAt;
 
-    @Getter
     @Column(name = "document_text", columnDefinition = "TEXT")
     private String documentText;
 
-    @Getter
     @Column(name = "document_key_words")
     private String documentKeyWords;
 
@@ -48,8 +41,8 @@ public class Document {
     public Document(long documentId,
                     String documentName,
                     String documentAuthor,
-                    LocalDateTime documentUploadedAt,
-                    LocalDateTime documentUpdatedAt,
+                    String documentUploadedAt,
+                    String documentUpdatedAt,
                     String documentText,
                     String documentKeyWords) {
         super();

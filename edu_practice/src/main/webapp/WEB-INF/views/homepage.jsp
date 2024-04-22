@@ -26,6 +26,7 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            vertical-align: top;
         }
         th {
             background-color: #f2f2f2;
@@ -154,8 +155,8 @@
                 <td>${document.documentText}</td>
                 <td>${document.documentKeyWords}</td>
                 <td class="actions">
-                    <button onclick="downloadDocument(2)">Download</button>
-                    <button onclick="deleteDocument(2)">Delete</button>
+                    <button onclick="downloadDocument(${document.documentId})">Download</button>
+                    <button onclick="deleteDocument(${document.documentId})">Delete</button>
                 </td>
             </tr>
         </c:forEach>
@@ -183,11 +184,11 @@
 
 <script>
 
-    var modal = document.getElementById("myModal");
+    const modal = document.getElementById("myModal");
 
-    var btn = document.getElementById("openModalBtn");
+    const btn = document.getElementById("openModalBtn");
 
-    var span = document.getElementsByClassName("close")[0];
+    const span = document.getElementsByClassName("close")[0];
 
     btn.onclick = function() {
         modal.style.display = "block";
@@ -211,17 +212,28 @@
                     "Content-Type": "application/json",
                 }
             }
+        ).then(
+            response => (
+                console.log(response.body)
+            )
         )
+
     }
 
     function deleteDocument(id) {
         fetch("http://localhost:8080/delete/" + id,
             {
-                method: "DELETE",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 }
             }
+        ).then(response => {
+            if (response.ok) {
+                window.location.href = "http://localhost:8080/home"
+            }
+        }
+
         )
     }
 </script>

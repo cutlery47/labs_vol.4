@@ -2,18 +2,18 @@ package controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import service.DocumentService;
 
 import model.Document;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -25,8 +25,9 @@ public class DocumentController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public ModelAndView getSome() {
+        System.out.println("home");
         List<Document> documents = documentService.getDocuments();
-        ModelAndView modelAndView = new ModelAndView("home");
+        ModelAndView modelAndView = new ModelAndView("homepage");
         modelAndView.addObject("documents", documents);
         return modelAndView;
     }
@@ -37,29 +38,22 @@ public class DocumentController {
             @RequestParam String document_name,
             @RequestParam String document_author) {
         System.out.println("uploading a new user");
-
         documentService.addDocument(raw_document, document_name, document_author);
-        return "home";
+        return "redirect:/home";
     }
 
+    @ResponseBody
     @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)
-    public void download(@PathVariable long id) {
+    public FileSystemResource download(@PathVariable long id) {
         System.out.println("downloading user with id = " + id);
-        Document document = documentService.getDocumentById(id);
+        File document_file = documentService.downloadDocumentById(id);
+        return new FileSystemResource(document_file);
     }
 
-    @RequestMapping(value = "/load", method = RequestMethod.GET)
-    public void load() {
-        System.out.println("loading data from the db");
-        List<Document> documents = documentService.getDocuments();
-        for (Document document : documents) {
-            System.out.println(document);
-        }
-    }
-
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable long id) {
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public String delete(@PathVariable long id) {
         System.out.println("deleting user with id = " + id);
         documentService.deleteDocumentById(id);
+        return "redirect:/home";
     }
 }

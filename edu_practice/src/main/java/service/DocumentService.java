@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import net.sourceforge.tess4j.Tesseract;
@@ -44,6 +45,8 @@ public class DocumentService {
                             String document_author) {
 
         LocalDateTime timestamp = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String formated_timestamp = timestamp.format(formatter);
 
         // initializing an intermediate file, which is created from raw_file
         File document_file = new File(
@@ -59,6 +62,8 @@ public class DocumentService {
 
             // tesseract file recognition
             recognized_text = tesseract.doOCR(document_file);
+
+            document_file.delete();
         } catch (TesseractException | IOException e) {
             e.printStackTrace();
             return;
@@ -78,7 +83,7 @@ public class DocumentService {
         StringBuilder most_common = new StringBuilder();
         for (Map.Entry<String, Integer> entry : words_freq.entrySet()) {
             if (i > words_freq.size() - 6) {
-                most_common.append(entry.getKey()).append("; ");
+                most_common.append(entry.getKey()).append(" - (").append(entry.getValue().toString()).append("); \n");
             }
             i += 1;
         }
@@ -87,8 +92,8 @@ public class DocumentService {
                 0,
                 document_name,
                 document_author,
-                timestamp,
-                timestamp,
+                formated_timestamp,
+                formated_timestamp,
                 recognized_text,
                 most_common.toString());
 
@@ -97,6 +102,28 @@ public class DocumentService {
 
     public void deleteDocumentById(long id) {
         documentRepository.delete(id);
+    }
+
+    public File downloadDocumentById(long id) {
+        Document document = documentRepository.get(id);
+        File document_file = new File("C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
+                + document.getDocumentName() + ".pdf");
+
+        try {
+            document_file.createNewFile();
+            OutputStream out = Files.newOutputStream(document_file.toPath());
+            out.write(document.getDocumentText().getBytes());
+            document_file.delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return document_file;
+
+
+
+
+
     }
 
     public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)

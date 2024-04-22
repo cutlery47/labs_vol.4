@@ -72,7 +72,6 @@ public class DocumentRepository {
     }
 
     public void add(Document document) {
-        System.out.println(document);
 
         Session session = null;
         Transaction transaction = null;
