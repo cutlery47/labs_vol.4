@@ -155,8 +155,13 @@
                 <td>${document.documentText}</td>
                 <td>${document.documentKeyWords}</td>
                 <td class="actions">
-                    <button onclick="downloadDocument(${document.documentId})">Download</button>
-                    <button onclick="deleteDocument(${document.documentId})">Delete</button>
+                    <a href="/download/${document.documentId}">
+                        <button>Download</button>
+                    </a>
+                    <a href="/delete/${document.documentId}">
+                        <button>Delete</button>
+                    </a>
+
                 </td>
             </tr>
         </c:forEach>
@@ -204,8 +209,8 @@
         }
     }
 
-    function downloadDocument(id) {
-        fetch("http://localhost:8080/download/" + id,
+    function requestDownloadDocument(id) {
+        return fetch("http://localhost:8080/download/" + id,
             {
                 method: "GET",
                 headers: {
@@ -213,11 +218,26 @@
                 }
             }
         ).then(
-            response => (
-                console.log(response.body)
-            )
+            response => {return response}
         )
+    }
 
+    async function downloadDocument(id) {
+        const res = await requestDownloadDocument(id);
+        const bytes = (await res.body.getReader().read()).value
+
+        const blob = new Blob([bytes.buffer], {type: "application/json"})
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'file.pdf')
+
+        document.body.append(link);
+        link.click();
+        document.body.removeChild(link);
+
+        window.URL.revokeObjectURL(url)
     }
 
     function deleteDocument(id) {

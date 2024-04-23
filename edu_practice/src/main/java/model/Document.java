@@ -19,10 +19,10 @@ public class Document {
     private Long documentId;
 
     @Column(name = "document_name")
-    private String documentName = "unknown file";
+    private String documentName = "unknown";
 
     @Column(name = "document_author")
-    private String documentAuthor = "unknown author";
+    private String documentAuthor = "unknown";
 
     @Column(name = "document_uploaded_at")
     private String documentUploadedAt;
@@ -32,6 +32,9 @@ public class Document {
 
     @Column(name = "document_text", columnDefinition = "TEXT")
     private String documentText;
+
+    @Column(name = "document_binary", length=65536)
+    private byte[] documentBinary;
 
     @Column(name = "document_key_words")
     private String documentKeyWords;
@@ -44,6 +47,7 @@ public class Document {
                     String documentUploadedAt,
                     String documentUpdatedAt,
                     String documentText,
+                    byte[] documentBinary,
                     String documentKeyWords) {
         super();
         this.documentId = documentId;
@@ -56,6 +60,7 @@ public class Document {
         this.documentUploadedAt = documentUploadedAt;
         this.documentUpdatedAt = documentUpdatedAt;
         this.documentText = documentText;
+        this.documentBinary = documentBinary;
         this.documentKeyWords = documentKeyWords;
     }
 

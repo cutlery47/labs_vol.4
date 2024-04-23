@@ -54,11 +54,13 @@ public class DocumentService {
                 + document_name + ".pdf");
 
         String recognized_text = "";
+        byte[] document_binary = null;
         try {
             // physically creating the file and filling it up
+            document_binary = raw_document.getBytes();
             document_file.createNewFile();
             OutputStream out = Files.newOutputStream(document_file.toPath());
-            out.write(raw_document.getBytes());
+            out.write(document_binary);
 
             // tesseract file recognition
             recognized_text = tesseract.doOCR(document_file);
@@ -95,6 +97,7 @@ public class DocumentService {
                 formated_timestamp,
                 formated_timestamp,
                 recognized_text,
+                document_binary,
                 most_common.toString());
 
         documentRepository.add(document);
@@ -112,17 +115,12 @@ public class DocumentService {
         try {
             document_file.createNewFile();
             OutputStream out = Files.newOutputStream(document_file.toPath());
-            out.write(document.getDocumentText().getBytes());
-            document_file.delete();
+            out.write(document.getDocumentBinary());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return document_file;
-
-
-
-
 
     }
 
