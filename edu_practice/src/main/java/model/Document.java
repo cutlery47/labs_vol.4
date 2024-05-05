@@ -11,36 +11,47 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "documents")
+// Класс, являющийся представлением таблицы Документов в базе данных
+// Используется в Hibetnate ORM для работы с данными
 public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "document_id")
+    // id документа
     private Long documentId;
 
     @Column(name = "document_name")
+    // имя документа
     private String documentName = "unknown";
 
     @Column(name = "document_author")
+    // автор документа
     private String documentAuthor = "unknown";
 
     @Column(name = "document_uploaded_at")
+    // время загрузки документа
     private String documentUploadedAt;
 
     @Column(name = "document_updated_at")
+    // время обновления документа
     private String documentUpdatedAt;
 
     @Column(name = "document_text", columnDefinition = "TEXT")
+    // текст документа
     private String documentText;
 
     @Column(name = "document_binary", length=65536)
+    // бинарное представление документа
     private byte[] documentBinary;
 
     @Column(name = "document_key_words")
+    // ключевые слова в документе
     private String documentKeyWords;
 
     public Document() {}
 
+    // конструктор класса
     public Document(long documentId,
                     String documentName,
                     String documentAuthor,
@@ -64,6 +75,7 @@ public class Document {
         this.documentKeyWords = documentKeyWords;
     }
 
+    // функция преобразования объекта класса в строку
     public String toString() {
         return ("id: " + documentId +
                 ", name: " + documentName +

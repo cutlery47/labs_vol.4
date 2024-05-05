@@ -21,25 +21,38 @@ import repository.DocumentRepository;
 
 @Service
 @ComponentScan("repository")
+// Класс сервиса, ответственный за бизнес-логику
 public class DocumentService {
 
     @Autowired
+    // Приватный аттрибут
+    // Для обеспечения шаблона проектирования Dependency Injection,
+    // контроллер в качестве одного из атрибутов хранит низлежащий
+    // по иерархии класс DocumentRepository
     private DocumentRepository documentRepository;
 
     @Autowired
+    // Приватный аттрибут
+    // Хранит объект класса Tesseract, используемый для обработки pdf-файлов
     private Tesseract tesseract;
 
+    // Публичная функция - возвращает документ из базы данных
+    // Вызывает соответствующую функцию репозитория
     public Document getDocumentById(long id) {
 
         return documentRepository.get(id);
     }
 
+    // Публичная функция - возвращает все документы из базы данных
+    // Вызывает соответствующую функцию репозитория
     public List<Document> getDocuments() {
 
         return documentRepository.getAll();
     }
 
-
+    // Публичная функция - ничего не возвращает
+    // Преобразует MultipartFile в File -> прогоняет распознование Tesseract-ом -> создает сущность Document ->
+    // передает Document в репозиторий
     public void addDocument(MultipartFile raw_document,
                             String document_name,
                             String document_author) {
@@ -102,11 +115,14 @@ public class DocumentService {
 
         documentRepository.add(document);
     }
-
+    // Публичная функция - ничего не возвращает
+    // Вызывает соответствующую функцию репозитория по удалению файла
     public void deleteDocumentById(long id) {
         documentRepository.delete(id);
     }
 
+    // Публичная функция - возвращает воссозданный pdf-файл из базы данных
+    // Создает заглушку -> записывает в заглушку бинарные данные -> передает заглушку пользователю
     public File downloadDocumentById(long id) {
         Document document = documentRepository.get(id);
         File document_file = new File("C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
@@ -124,6 +140,8 @@ public class DocumentService {
 
     }
 
+    // Публичная функция - возвращает ХэшМап, ключи которого - слова в тексте, значения - количество повторений в тексте
+    // Сортирует неотсортированный хэшмап по значениям
     public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
     {
         // Create a list from elements of HashMap

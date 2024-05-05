@@ -132,7 +132,10 @@
     </style>
 </head>
 <body>
+
 <h2>Document List</h2>
+
+<%--Таблица с документами--%>
 <table>
     <tr>
         <th>ID</th>
@@ -144,6 +147,7 @@
         <th>Document Keywords</th>
         <th>Actions</th>
     </tr>
+    <%--HTML-кусок который добавляет полученнае данные в таблицу (графически)--%>
     <tbody>
         <c:forEach var="document" items="${documents}">
             <tr>
@@ -155,9 +159,11 @@
                 <td>${document.documentText}</td>
                 <td>${document.documentKeyWords}</td>
                 <td class="actions">
+                    <%--Отправка запроса на скачивание по id--%>
                     <a href="/download/${document.documentId}">
                         <button>Download</button>
                     </a>
+                            <%--Отправка запроса на удаление по id--%>/
                     <a href="/delete/${document.documentId}">
                         <button>Delete</button>
                     </a>
@@ -169,8 +175,13 @@
 
 </table>
 
+<%--Кнопка загрузки документа--%>
 <button id="openModalBtn">Upload Document</button>
 
+<%--Модель, появляющаяся при нажании на кнопку загрузки документа--%>
+<%--Хранит в себе форму, в которую вводится название документа и автор--%>
+<%--При нажатии на кнопку выбора документа открывает файловый менеджер--%>
+<%--При нажатии на кнопку загрузки - отпраляется запрос на добавление новго файла в БД--%>
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -188,13 +199,14 @@
 </div>
 
 <script>
-
+    // id модели
     const modal = document.getElementById("myModal");
-
+    // id кнопки, по нажатию на которую открывается модель
     const btn = document.getElementById("openModalBtn");
-
+    // кнопка закрытия модели
     const span = document.getElementsByClassName("close")[0];
 
+    //  три нижние функции отвечают за отображение модели, пока она не закрыта
     btn.onclick = function() {
         modal.style.display = "block";
     }
@@ -209,6 +221,7 @@
         }
     }
 
+    // запрос на скачивание документа
     function requestDownloadDocument(id) {
         return fetch("http://localhost:8080/download/" + id,
             {
@@ -222,6 +235,7 @@
         )
     }
 
+    // скачивание документа
     async function downloadDocument(id) {
         const res = await requestDownloadDocument(id);
         const bytes = (await res.body.getReader().read()).value
@@ -240,6 +254,7 @@
         window.URL.revokeObjectURL(url)
     }
 
+    // запроса на удаление документа
     function deleteDocument(id) {
         fetch("http://localhost:8080/delete/" + id,
             {

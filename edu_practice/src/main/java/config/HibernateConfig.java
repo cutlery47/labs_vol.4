@@ -16,6 +16,8 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+// Класс конфигурации для Hibernate ORM
+// Можно не добавлять в отчет
 public class HibernateConfig {
 
     @Bean

@@ -13,6 +13,8 @@ import java.util.List;
 
 @Configuration
 @ComponentScan("controller")
+// Класс конфигурации для фреймворка
+// Можно не добавлять в отчет
 public class AppConfig implements WebMvcConfigurer {
 
     @Bean
