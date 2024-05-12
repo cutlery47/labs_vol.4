@@ -5,7 +5,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.sql.Time;
 import java.util.Objects;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -31,11 +34,11 @@ public class Document {
 
     @Column(name = "document_uploaded_at")
     // время загрузки документа
-    private String documentUploadedAt;
+    private Timestamp documentUploadedAt;
 
     @Column(name = "document_updated_at")
     // время обновления документа
-    private String documentUpdatedAt;
+    private Timestamp documentUpdatedAt;
 
     @Column(name = "document_text", columnDefinition = "TEXT")
     // текст документа
@@ -55,8 +58,8 @@ public class Document {
     public Document(long documentId,
                     String documentName,
                     String documentAuthor,
-                    String documentUploadedAt,
-                    String documentUpdatedAt,
+                    Timestamp documentUploadedAt,
+                    Timestamp documentUpdatedAt,
                     String documentText,
                     byte[] documentBinary,
                     String documentKeyWords) {

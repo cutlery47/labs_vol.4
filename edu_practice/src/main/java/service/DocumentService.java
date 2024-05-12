@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.sql.Timestamp;
 
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -58,8 +59,8 @@ public class DocumentService {
                             String document_author) {
 
         LocalDateTime timestamp = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        String formated_timestamp = timestamp.format(formatter);
+        Timestamp sql_date = Timestamp.valueOf(timestamp);
+
 
         // initializing an intermediate file, which is created from raw_file
         File document_file = new File(
@@ -107,8 +108,8 @@ public class DocumentService {
                 0,
                 document_name,
                 document_author,
-                formated_timestamp,
-                formated_timestamp,
+                sql_date,
+                sql_date,
                 recognized_text,
                 document_binary,
                 most_common.toString());

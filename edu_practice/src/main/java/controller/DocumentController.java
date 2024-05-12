@@ -83,12 +83,12 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     // Публичная функция, возвращаемое значение - String, перенаправляющий на главное меню
     // Получает pdf-файл в базе данных и удаляет его
     public String delete(@PathVariable long id) {
         System.out.println("deleting user with id = " + id);
         documentService.deleteDocumentById(id);
-        return "redirect:/home/";
+        return "homepage";
     }
 }

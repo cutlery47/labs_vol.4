@@ -163,11 +163,8 @@
                     <a href="/download/${document.documentId}">
                         <button>Download</button>
                     </a>
-                            <%--Отправка запроса на удаление по id--%>/
-                    <a href="/delete/${document.documentId}">
-                        <button>Delete</button>
-                    </a>
-
+                            <%--Отправка запроса на удаление по id--%>
+                    <button onclick=deleteDocument(${document.documentId})>Delete</button>
                 </td>
             </tr>
         </c:forEach>
@@ -258,15 +255,13 @@
     function deleteDocument(id) {
         fetch("http://localhost:8080/delete/" + id,
             {
-                method: "POST",
+                method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 }
             }
         ).then(response => {
-            if (response.ok) {
-                window.location.href = "http://localhost:8080/home"
-            }
+            window.location.reload()
         }
 
         )
