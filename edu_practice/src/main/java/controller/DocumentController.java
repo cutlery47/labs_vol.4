@@ -25,20 +25,12 @@ import java.util.List;
 
 @Controller
 @ComponentScan("service")
-// Класс, отвечающий за перенаправление запросов
-// на отведенные им функции
 public class DocumentController {
 
     @Autowired
-    // Приватный аттрибут
-    // Для обеспечения шаблона проектирования Dependency Injection,
-    // контроллер в качестве одного из атрибутов хранит низлежащий
-    // по иерархии класс DocumentService
     private DocumentService documentService;
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    // Публичная функция, возвращает ModelAndView
-    // Получает GET-запрос -> забирает из базы данных данные о всех файлах -> отрисовывает главное меню
     public ModelAndView get() {
         System.out.println("home");
         List<Document> documents = documentService.getDocuments();
@@ -48,8 +40,6 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    // Публичная функция, возвращаемое значение - String, перенаправляющий на главное меню
-    // Получает pdf-файл из POST-запроса -> загружает его в базу данных -> перенаправляет в главное меню
     public String upload(
             @RequestParam MultipartFile raw_document,
             @RequestParam String document_name,
@@ -61,8 +51,6 @@ public class DocumentController {
 
 
     @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)
-    // Публичная функция, ничего не возвращает
-    // Получает pdf-файл из базы данных -> добавляет этот в файл в тело ответа -> отдает пользователю ответ с файлом
     public void download(@PathVariable long id, HttpServletResponse response)
     throws IOException {
         System.out.println("downloading user with id = " + id);
@@ -84,8 +72,6 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    // Публичная функция, возвращаемое значение - String, перенаправляющий на главное меню
-    // Получает pdf-файл в базе данных и удаляет его
     public String delete(@PathVariable long id) {
         System.out.println("deleting user with id = " + id);
         documentService.deleteDocumentById(id);
