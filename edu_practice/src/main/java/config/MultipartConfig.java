@@ -7,8 +7,6 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @Configuration
-// Класс конфигурации для pdf-файла
-// Можно не добавлять в отчет
 public class MultipartConfig {
 
     @Bean

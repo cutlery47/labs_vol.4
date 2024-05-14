@@ -16,16 +16,11 @@ import model.Document;
 @Repository
 @Transactional
 @ComponentScan("config")
-// Класс репозитория для работы с базой данных
 public class DocumentRepository {
 
     @Autowired
-    // Приватный аттрибут
-    // Хранит сессию (подключение) Hibernate ORM
     private SessionFactory sessionFactory;
 
-    // Публичная функция, возвращаемое значение - документ из базы данных
-    // Находит и возвращает из базы данных документ с указанным id
     public Document get(long id) {
         Session session = null;
         Transaction transaction = null;
@@ -51,7 +46,6 @@ public class DocumentRepository {
         return document;
     }
 
-    // публичная функция, возвращает все документы из базы данных
     public List<Document> getAll() {
         List<Document> documents = null;
         Session session = null;
@@ -77,8 +71,6 @@ public class DocumentRepository {
         return documents;
     }
 
-    // Публичная функция - ничего не возвращает
-    // Добавляет документ в базу данных
     public void add(Document document) {
 
         Session session = null;
@@ -103,8 +95,6 @@ public class DocumentRepository {
         }
     }
 
-    // Публичная функция - ничего не возвращает
-    // Удаляет документ по указанному id из базы данных
     public void delete(long id) {
         Session session = null;
         Transaction transaction = null;

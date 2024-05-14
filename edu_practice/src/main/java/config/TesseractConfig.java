@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-// Класс конфигурации для Tesseract
-// Можно не добавлять в отчет
 public class TesseractConfig {
 
     @Bean

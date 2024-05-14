@@ -26,34 +26,19 @@ import repository.DocumentRepository;
 public class DocumentService {
 
     @Autowired
-    // Приватный аттрибут
-    // Для обеспечения шаблона проектирования Dependency Injection,
-    // контроллер в качестве одного из атрибутов хранит низлежащий
-    // по иерархии класс DocumentRepository
     private DocumentRepository documentRepository;
 
     @Autowired
-    // Приватный аттрибут
-    // Хранит объект класса Tesseract, используемый для обработки pdf-файлов
     private Tesseract tesseract;
 
-    // Публичная функция - возвращает документ из базы данных
-    // Вызывает соответствующую функцию репозитория
     public Document getDocumentById(long id) {
-
         return documentRepository.get(id);
     }
 
-    // Публичная функция - возвращает все документы из базы данных
-    // Вызывает соответствующую функцию репозитория
     public List<Document> getDocuments() {
-
         return documentRepository.getAll();
     }
 
-    // Публичная функция - ничего не возвращает
-    // Преобразует MultipartFile в File -> прогоняет распознование Tesseract-ом -> создает сущность Document ->
-    // передает Document в репозиторий
     public void addDocument(MultipartFile raw_document,
                             String document_name,
                             String document_author) {
@@ -62,7 +47,6 @@ public class DocumentService {
         Timestamp sql_date = Timestamp.valueOf(timestamp);
 
 
-        // initializing an intermediate file, which is created from raw_file
         File document_file = new File(
                 "C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
                 + document_name + ".pdf");
@@ -70,7 +54,6 @@ public class DocumentService {
         String recognized_text = "";
         byte[] document_binary = null;
         try {
-            // physically creating the file and filling it up
             document_binary = raw_document.getBytes();
             document_file.createNewFile();
             OutputStream out = Files.newOutputStream(document_file.toPath());
@@ -116,14 +99,11 @@ public class DocumentService {
 
         documentRepository.add(document);
     }
-    // Публичная функция - ничего не возвращает
-    // Вызывает соответствующую функцию репозитория по удалению файла
+
     public void deleteDocumentById(long id) {
         documentRepository.delete(id);
     }
 
-    // Публичная функция - возвращает воссозданный pdf-файл из базы данных
-    // Создает заглушку -> записывает в заглушку бинарные данные -> передает заглушку пользователю
     public File downloadDocumentById(long id) {
         Document document = documentRepository.get(id);
         File document_file = new File("C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
@@ -141,8 +121,6 @@ public class DocumentService {
 
     }
 
-    // Публичная функция - возвращает ХэшМап, ключи которого - слова в тексте, значения - количество повторений в тексте
-    // Сортирует неотсортированный хэшмап по значениям
     public static HashMap<String, Integer> sortByValue(HashMap<String, Integer> hm)
     {
         // Create a list from elements of HashMap

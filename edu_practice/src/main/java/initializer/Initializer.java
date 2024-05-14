@@ -12,8 +12,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-// Класс-инициализатор веб-приложения
-// Можно не добавлять в отчет
 public class Initializer implements WebApplicationInitializer {
 
     @Override
