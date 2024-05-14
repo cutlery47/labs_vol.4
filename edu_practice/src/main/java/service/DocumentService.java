@@ -45,14 +45,12 @@ public class DocumentService {
 
         LocalDateTime timestamp = LocalDateTime.now();
         Timestamp sql_date = Timestamp.valueOf(timestamp);
-
-
         File document_file = new File(
                 "C:\\Programming\\leti\\edu_practice\\src\\main\\resources\\files\\"
                 + document_name + ".pdf");
 
-        String recognized_text = "";
-        byte[] document_binary = null;
+        String recognized_text;
+        byte[] document_binary;
         try {
             document_binary = raw_document.getBytes();
             document_file.createNewFile();

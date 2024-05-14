@@ -2,7 +2,6 @@ package initializer;
 
 import config.AppConfig;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -20,11 +19,16 @@ public class Initializer implements WebApplicationInitializer {
         appContext.register(AppConfig.class);
 
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
-                "dispatcher", new DispatcherServlet(appContext));
+                "dispatcher",
+                new DispatcherServlet(appContext));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 
-        dispatcher.setMultipartConfig(new MultipartConfigElement("", 1000000000, 1000000000 * 2, 1000000000 / 2));
+        dispatcher.setMultipartConfig(new MultipartConfigElement(
+                "",
+                1000000000,
+                1000000000 * 2,
+                1000000000 / 2));
 
     }
 }

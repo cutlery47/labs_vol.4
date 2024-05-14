@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.sql.Time;
 import java.util.Objects;
 
 import java.sql.Timestamp;

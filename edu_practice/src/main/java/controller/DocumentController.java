@@ -28,7 +28,6 @@ public class DocumentController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public ModelAndView get() {
-        System.out.println("home");
         List<Document> documents = documentService.getDocuments();
         ModelAndView modelAndView = new ModelAndView("homepage");
         modelAndView.addObject("documents", documents);
@@ -44,7 +43,6 @@ public class DocumentController {
         documentService.addDocument(raw_document, document_name, document_author);
         return "redirect:/home/";
     }
-
 
     @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)
     public void download(@PathVariable long id, HttpServletResponse response)
